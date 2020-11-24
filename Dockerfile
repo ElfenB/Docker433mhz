@@ -1,4 +1,4 @@
-FROM arm32v7/python:2.7.13-jessie
+FROM arm32v7/python
 
 COPY scripts/led_blinker.py .
 COPY scripts/requirements.txt .
