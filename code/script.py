@@ -1,4 +1,4 @@
-from code.blink import switchLEDon, swithLEDoff
+from code.blink import switchLEDoff, switchLEDon, swithLEDoff
 import paho.mqtt.client as mqtt
 import time
 import sys
@@ -14,7 +14,7 @@ def on_message (client, userdata, message):
     if (load == "ON"):
         switchLEDon()
     elif (load == "OFF"):
-        swithLEDoff()
+        switchLEDoff()
 
 
 

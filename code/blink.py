@@ -12,7 +12,7 @@ def switchLEDon():
     GPIO.output(led_pin, True)
 
 
-def swithLEDoff():
+def switchLEDoff():
     GPIO.output(led_pin, False)
 
 
