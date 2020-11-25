@@ -1,0 +1,2 @@
+docker build -t "blinker" .
+docker container run --privileged -d blinker:latest
