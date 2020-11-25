@@ -1,4 +1,4 @@
-from code.blink import switchLEDoff, switchLEDon, switchLEDoff
+from blink import *
 import paho.mqtt.client as mqtt
 import time
 import sys
@@ -12,9 +12,9 @@ def on_message (client, userdata, message):
     load = str(message.payload.decode("utf-8"))
     print("message", load, "in", message.topic)
     if (load == "ON"):
-        switchLEDon()
+        switchLEDon(8)
     elif (load == "OFF"):
-        switchLEDoff()
+        switchLEDoff(8)
 
 
 # new instance of the paho-mqtt client
@@ -36,6 +36,15 @@ client.on_message = function = on_message
 
 # publish a message with payload to a topic
 client.publish(topic1, "OFF")
+
+# testing GPIO ports
+i = 0
+while i < 10:
+    switchLEDon(8)
+    time.sleep(1)
+    switchLEDoff(8)
+    time.sleep(1)
+    i += 1
 
 # Sets an infinite loop that waits for incoming messages
 while True:

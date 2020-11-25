@@ -4,7 +4,7 @@ FROM arm32v7/python
 WORKDIR /code
 
 # copy all files from the current working directory into the container
-COPY . .
+COPY ./code .
 
 # RUN apt-get update
 # RUN pip install --upgrade pip

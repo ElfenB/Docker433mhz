@@ -1,20 +1,16 @@
 import RPi.GPIO as GPIO
-import time
 
-led_pin = 8
-
-# Configure the PIN # 8
-GPIO.setmode(GPIO.BOARD)
-GPIO.setup(led_pin, GPIO.OUT)
-GPIO.setwarnings(False)
-
-def switchLEDon():
+def switchLEDon(led_pin):
+    GPIO.setmode(GPIO.BOARD)
+    GPIO.setup(led_pin, GPIO.OUT)
+    GPIO.setwarnings(False)
     GPIO.output(led_pin, True)
+    GPIO.cleanup()
 
 
-def switchLEDoff():
+def switchLEDoff(led_pin):
+    GPIO.setmode(GPIO.BOARD)
+    GPIO.setup(led_pin, GPIO.OUT)
+    GPIO.setwarnings(False)
     GPIO.output(led_pin, False)
-
-
-# Release Resources
-GPIO.cleanup()
+    GPIO.cleanup()
