@@ -6,7 +6,8 @@ import sys
 # set broker address to the right ip
 broker_address = "192.168.178.56"
 topic1 = "/home/OG/Arbeitszimmer/LEDtest/status"
-topic2 = "/home/OG/Arbeitszimmer/LEDtest/cmnd"
+topic2 = "/home/OG/Arbeitszimmer/LEDtest/health"
+topic3 = "/home/OG/Arbeitszimmer/LEDtest/cmnd"
 # This probably has to stay globally - otherwise it won't work
 led1 = LED(14)
 
@@ -27,7 +28,6 @@ def switchLED(led_pin, status):
     else: 
         client.publish(topic1, "OFF")
         led1.off()
-    client.publish(topic1, "Switching successful")
 
 
 # new instance of the paho-mqtt client
@@ -43,12 +43,12 @@ client.connect(broker_address)
 client.loop_start()
 
 # subscribe to a topic
-client.subscribe(topic2)
+client.subscribe(topic3)
 # set the function that gets triggered when a message is received
 client.on_message = function = on_message
 
 # publish a message with payload to a topic
-client.publish(topic1, "Ready Booted up")
+client.publish(topic2, "Ready Booted up")
 
 # testing GPIO ports
 i = 0
