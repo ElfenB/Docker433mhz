@@ -5,10 +5,11 @@ import sys
 
 # set broker address to the right ip
 broker_address = "192.168.178.56"
-topic1 = "/home/OG/Arbeitszimmer/LEDtest/status"
-topic2 = "/home/OG/Arbeitszimmer/LEDtest/health"
-topic3 = "/home/OG/Arbeitszimmer/LEDtest/cmnd"
-# This probably has to stay globally - otherwise it won't work
+status_topic = "/home/OG/Arbeitszimmer/LEDtest/status"
+health_topic = "/home/OG/Arbeitszimmer/LEDtest/health"
+cmnd_topic = "/home/OG/Arbeitszimmer/LEDtest/cmnd"
+
+# This has to stay globally - otherwise it won't work
 led1 = LED(14)
 
 # determine what happens when message gets send to a subscribed channel
@@ -16,17 +17,17 @@ def on_message (client, userdata, message):
     load = str(message.payload.decode("utf-8"))
     print("message", load, "in", message.topic)
     if (load == "ON"):
-        switchLED(14, True)
+        switchLED1(True)
     elif (load == "OFF"):
-        switchLED(14, False)
+        switchLED1(False)
 
 
-def switchLED(led_pin, status):
+def switchLED1(status):
     if status:
-        client.publish(topic1, "ON")
+        client.publish(status_topic, "ON")
         led1.on()
     else: 
-        client.publish(topic1, "OFF")
+        client.publish(status_topic, "OFF")
         led1.off()
 
 
@@ -43,23 +44,17 @@ client.connect(broker_address)
 client.loop_start()
 
 # subscribe to a topic
-client.subscribe(topic3)
+client.subscribe(cmnd_topic)
 # set the function that gets triggered when a message is received
 client.on_message = function = on_message
 
 # publish a message with payload to a topic
-client.publish(topic2, "Ready Booted up")
+client.publish(health_topic, "Ready Booted up")
 
-# testing GPIO ports
-i = 0
-while i < 5:
-    switchLED(14, True)
-    sleep(1)
-    switchLED(14, False)
-    sleep(1)
-    i += 1
+# Initial power-up
+switchLED1(True)
 
-# Sets an infinite loop that waits for incoming messages
+# Sets an infinite loop to wait for incoming messages
 while True:
     try:
         sleep
