@@ -1,20 +1,35 @@
-from blink import *
+import RPi.GPIO as GPIO
 import paho.mqtt.client as mqtt
 import time
 import sys
 
 # set broker address to the right ip
 broker_address = "192.168.178.56"
-topic1 = "/home/OG/Arbeitszimmer/LEDtest"
+topic1 = "/home/OG/Arbeitszimmer/LEDtest/status"
+topic2 = "/home/OG/Arbeitszimmer/LEDtest/cmnd"
+
 
 # determine what happens when message gets send to a subscribed channel
 def on_message (client, userdata, message):
     load = str(message.payload.decode("utf-8"))
     print("message", load, "in", message.topic)
     if (load == "ON"):
-        switchLEDon(8)
+        switchLED(8, True)
     elif (load == "OFF"):
-        switchLEDoff(8)
+        switchLED(8, False)
+
+
+def switchLED(led_pin, status):
+    if status:
+        client.publish(topic1, "ON")
+    else: 
+        client.publish(topic1, "OFF")
+    GPIO.setmode(GPIO.BOARD)
+    GPIO.setup(led_pin, GPIO.OUT)
+    GPIO.setwarnings(False)
+    GPIO.output(led_pin, status)
+    GPIO.cleanup()
+    client.publish(topic1, "Switching successful")
 
 
 # new instance of the paho-mqtt client
@@ -30,20 +45,20 @@ client.connect(broker_address)
 client.loop_start()
 
 # subscribe to a topic
-client.subscribe(topic1)
+client.subscribe(topic2)
 # set the function that gets triggered when a message is received
 client.on_message = function = on_message
 
 # publish a message with payload to a topic
-client.publish(topic1, "OFF")
+client.publish(topic1, "Ready Booted up")
 
 # testing GPIO ports
 i = 0
 while i < 10:
-    switchLEDon(8)
-    time.sleep(1)
-    switchLEDoff(8)
-    time.sleep(1)
+    switchLED(8, True)
+    time.sleep(2)
+    switchLED(8, False)
+    time.sleep(2)
     i += 1
 
 # Sets an infinite loop that waits for incoming messages
